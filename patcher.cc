@@ -41,7 +41,7 @@ void patcher::get_ros_pdata(string name, bool swap){
 }
 
 string patcher::get_dest_name(string name){
-  return name+".out";
+  return name+".patched";
 }
 
 void patcher::write_patch(int offset, std::ofstream& fout){
@@ -56,7 +56,7 @@ void patcher::do_patch(string name, bool swap){
   freader >> std::noskipws;
   std::ofstream fwriter(fileout.c_str(), std::ios::binary);
   if(swap) status("Swap Enabled");
-  status("Creating Output File...");
+  //status("\nCreating Output File...");
   fwriter << freader.rdbuf(); // copy
   freader.seekg(0, std::ios::end);
   auto pos = freader.tellg();
@@ -69,44 +69,44 @@ void patcher::do_patch(string name, bool swap){
     return;
   }
   else if(0x1000000L == pos){ // nor
-    status("Applying ROS Patch 1 of 2");
+    status("\nApplying ROS Patch 1 of 2");
     write_patch(0xc0010, fwriter);
-    status("Applying ROS Patch 2 of 2");
+    status("\nApplying ROS Patch 2 of 2");
     write_patch(0x7c0010, fwriter);
     if(chk_flag(0x1)){
-      status("Applying TRVK Patches");
+      status("\nApplying TRVK Patches");
       get_pdata("nor_rvk.bin", swap);
       write_patch(0x40000, fwriter);
     }
     if(chk_flag(0x2)){
-      status("Restoring ROS Header 1 of 2");
+      status("\nRestoring ROS Header 1 of 2");
       get_pdata("ros_head.bin", swap);
       write_patch(0xc0000, fwriter);
-      status("Restoring ROS Header 2 of 2");
+      status("\nRestoring ROS Header 2 of 2");
       write_patch(0x7c0000, fwriter);
     }
-    status("All Patches Applied To NOR");
+    status("\nAll Patches Applied To NOR");
   }else{ // nand
-    status("Applying ROS Patch 1 of 2");
+    status("\nApplying ROS Patch 1 of 2");
     write_patch(0xc0030, fwriter);
-    status("Applying ROS Patch 2 of 2");
+    status("\nApplying ROS Patch 2 of 2");
     write_patch(0x7c0020, fwriter);
     if(chk_flag(0x1)){
-      status("Applying TRVK Patches");
+      status("\nApplying TRVK Patches");
       get_pdata("nand_rvk.bin", swap);
       write_patch(0x40000, fwriter);
     }
     if(chk_flag(0x2)){
-      status("Restoring ROS Header 1 of 2");
+      status("\nRestoring ROS Header 1 of 2");
       get_pdata("ros_head.bin", swap);
       write_patch(0xc0020, fwriter);
-      status("Restoring ROS Header 2 of 2");
+      status("\nRestoring ROS Header 2 of 2");
       write_patch(0x7c0010, fwriter);
     }
-    status("All Patches Applied To NAND");
+    status("\nAll Patches Applied To NAND");
   }
 
   if(chk_flag(0x4)); // autoexit, reserved
-  cout << "Done\n";
+  cout << "\nOutput File: " + name + ".patched" + "\n\n";
   return;
 }
