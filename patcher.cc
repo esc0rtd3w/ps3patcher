@@ -56,50 +56,54 @@ void patcher::do_patch(string name, bool swap){
   freader >> std::noskipws;
   std::ofstream fwriter(fileout.c_str(), std::ios::binary);
   if(swap) status("Go swap");
-  status("Creating output file...");
+  status("Creating Output File...");
   fwriter << freader.rdbuf(); // copy
   freader.seekg(0, std::ios::end);
   auto pos = freader.tellg();
   freader.close();
   get_ros_pdata("patch.bin", swap);
-  status("input size: "+std::to_string(pos)+" bytes");
+  status("Input Size: "+std::to_string(pos)+" Bytes");
   if(pos!=0x1000000L && pos!=0x10000000L){
     remove(fileout.c_str());
     error("size error, exits");
     return;
   }
   else if(0x1000000L == pos){ // nor
-    status("Go NOR");
+    status("Applying ROS Patch 1 of 2");
     write_patch(0xc0010, fwriter);
+    status("Applying ROS Patch 2 of 2");
     write_patch(0x7c0010, fwriter);
     if(chk_flag(0x1)){
-      status("Go trvkpatches");
+      status("Applying TRVK Patches");
       get_pdata("nor_rvk.bin", swap);
       write_patch(0x40000, fwriter);
     }
     if(chk_flag(0x2)){
-      status("Go forcepatch && rosheader");
+      status("Restoring ROS Header 1 of 2");
       get_pdata("ros_head.bin", swap);
       write_patch(0xc0000, fwriter);
+      status("Restoring ROS Header 2 of 2");
       write_patch(0x7c0000, fwriter);
     }
-    status("Done NOR");
+    status("All Patches Applied To NOR");
   }else{ // nand
-    status("Go NAND");
+    status("Applying ROS Patch 1 of 2");
     write_patch(0xc0030, fwriter);
+    status("Applying ROS Patch 2 of 2");
     write_patch(0x7c0020, fwriter);
     if(chk_flag(0x1)){
-      status("Go trvkpatches");
+      status("Applying TRVK Patches");
       get_pdata("nand_rvk.bin", swap);
       write_patch(0x40000, fwriter);
     }
     if(chk_flag(0x2)){
-      status("Go forcepatch && rosheader");
+      status("Restoring ROS Header 1 of 2");
       get_pdata("ros_head.bin", swap);
       write_patch(0xc0020, fwriter);
+      status("Restoring ROS Header 2 of 2");
       write_patch(0x7c0010, fwriter);
     }
-    status("Done NAND");
+    status("All Patches Applied To NAND");
   }
 
   if(chk_flag(0x4)); // autoexit, reserved
