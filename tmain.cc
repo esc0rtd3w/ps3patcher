@@ -60,7 +60,7 @@ int main(int argc, char** argv){
   }while(next_op!=-1);
 
   if(optind >= argc){ 
-	show_help(appname);
+  show_help(appname);
     return 1;
   }
 
