@@ -8,12 +8,12 @@ using std::endl;
 
 void show_help(string appname){
   cout << "Usage: " << appname << " options [inputfile]" << endl;
-  cout << " -h --help" << setw(40) << "Display help information." << endl;
-  cout << " -t --trvk" << setw(40) << "Set the trvkpatches flag." << endl;
-  cout << " -f --force" << setw(38) << "Set the forcepatch flag." << endl;
-  cout << " -a --autoexit" << setw(33) << "Set the autoexit flag." << endl;
-  cout << " -s --swap" << setw(38) << "Enable the swap option." << endl;
-  cout << " -d --debug" << setw(30) << "Show debug info." << endl;
+  cout << " -h --help" << setw(40) << "Display Help Information." << endl;
+  cout << " -t --trvk" << setw(40) << "Set The trvkpatches Flag." << endl;
+  cout << " -f --force" << setw(38) << "Set The forcepatch Flag." << endl;
+  cout << " -a --autoexit" << setw(33) << "Set the autoexit Flag." << endl;
+  cout << " -s --swap" << setw(38) << "Enable The Swap Option." << endl;
+  cout << " -d --debug" << setw(30) << "Show Debug Info." << endl;
 }
 
 int main(int argc, char** argv){
@@ -67,7 +67,7 @@ int main(int argc, char** argv){
   patcher p(is_debug);
   p.set_flag(flag);
   // cout << "flag: " << (int)p.get_flag() << endl;
-  cout << "Input Fle: " << argv[optind] << endl;
+  cout << "Input File: " << argv[optind] << endl;
 
   // run
   p.do_patch(argv[optind], is_swap);
