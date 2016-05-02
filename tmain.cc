@@ -67,7 +67,7 @@ int main(int argc, char** argv){
   patcher p(is_debug);
   p.set_flag(flag);
   // cout << "flag: " << (int)p.get_flag() << endl;
-  cout << "input file: " << argv[optind] << endl;
+  cout << "Input Fle: " << argv[optind] << endl;
 
   // run
   p.do_patch(argv[optind], is_swap);

@@ -47,7 +47,7 @@ string patcher::get_dest_name(string name){
 void patcher::write_patch(int offset, std::ofstream& fout){
   fout.seekp(offset, std::ios::beg);
   fout.write((const char*)&pdata[0], pdata.size());
-  status("patchdata size: "+std::to_string(pdata.size())+" bytes");
+  status("Patch Data Size: "+std::to_string(pdata.size())+" Bytes");
 }
 
 void patcher::do_patch(string name, bool swap){
@@ -55,7 +55,7 @@ void patcher::do_patch(string name, bool swap){
   std::ifstream freader(name.c_str(), std::ios::binary);
   freader >> std::noskipws;
   std::ofstream fwriter(fileout.c_str(), std::ios::binary);
-  if(swap) status("Go swap");
+  if(swap) status("Swap Enabled");
   status("Creating Output File...");
   fwriter << freader.rdbuf(); // copy
   freader.seekg(0, std::ios::end);
